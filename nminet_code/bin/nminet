@@ -1,0 +1,7 @@
+#!/bin/bash
+
+dir=`dirname $0`
+
+export PYTHONPATH=${dir}/../lib
+
+exec ${dir}/../src/nminet.py "$@"

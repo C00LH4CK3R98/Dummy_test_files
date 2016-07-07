@@ -1,0 +1,74 @@
+#!/bin/sh
+#
+# dhclient hook.  Invoked by dhclient-script during DHCP lease transitions.
+# Gathers the updated DHCP lease information and passes it along to nminet
+#
+# See dhclient-script(8) and dhcp-options(5) for more details
+#
+
+NMINETCTL="/opt/omneon/bin/nminetctl"
+
+case $reason in
+    PREINIT)
+        # The DHCP client is requesting that an interface be configured as required
+        # in order to send packets prior to receiving an actual address. 
+        # ...
+        # For other clients, it may be possible to simply configure the interface up
+        # without actually giving it an IP address at all.
+
+
+        # IP addresses should be cleared here but we keep them for compatibility
+        #ip addr flush dev $interface
+
+        # dhclient-script disables interface if lease is expired, re-enable it here
+        ip link set up dev "$interface"
+        ;;
+
+    # Lease binding or renewal
+    BOUND|RENEW|REBIND|REBOOT)
+        gw=`echo $new_routers | sed 's#^\([0-9.]*\).*#\1#'` # Take best option
+
+        $NMINETCTL dhcp --bound --proto=4 --dev="$interface" --ip="$new_ip_address" --mask="$new_subnet_mask" --gateway="$gw"
+
+        /usr/bin/env python /opt/omneon/sbin/set_dns.py
+        ;;
+
+    TIMEOUT)
+        # The DHCP client has been unable to contact any DHCP servers.
+        #
+        # However, an old lease has been identified, and its parameters
+        # have been passed in as with BOUND
+        #
+        # The client configuration script should test these parameters and,
+        # if it has reason to believe they are valid, should exit with a
+        # value of zero. If not, it should exit with a nonzero value.
+        #
+
+        exit 1
+
+        ;;
+    EXPIRE|FAIL)
+        # EXPIRE:
+        # The DHCP client has failed to renew its lease or acquire a new
+        # one, and the lease has expired. The IP address must be relinquished,
+        # and all related parameters should be deleted, as in RENEW and REBIND.
+        #
+        # FAIL:
+        # The DHCP client has been unable to contact any DHCP servers, and any
+        # leases that have been tested have not proved to be valid. The parameters
+        # from the last lease tested should be deconfigured.
+
+        $NMINETCTL dhcp --expire --proto=4 --dev="$interface"
+
+        ;;
+    STOP)
+        # The dhclient has been informed to shut down gracefully
+        ;;
+    *)
+        ;;
+esac
+
+# Always return success, so that dhclient can continue normally.
+# Exit stops the execution of original dhclient-script
+exit 0
+

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PlatformNetworkModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <EthernetPortConfigModels>
+    <EthernetPortConfigModel>
+      <PortIdentifier>1</PortIdentifier>
+      <Name>Management 01</Name>
+      <EnableInterface>true</EnableInterface>
+      <EnableDHCP>false</EnableDHCP>
+      <EnableRedundancy>true</EnableRedundancy>
+      <RedundancyMode>AUTOMATIC</RedundancyMode>
+      <IsManualPrimaryPort>true</IsManualPrimaryPort>
+      <AutoNegotiate>AUTO_NEGOTIATE</AutoNegotiate>
+      <IPAddress>192.168.1.1</IPAddress>
+      <NetworkMask>255.255.255.0</NetworkMask>
+      <Gateway>0.0.0.0</Gateway>
+      <InterfaceRoles>
+        <InterfaceRoleModel>
+          <InterfaceRole>Management</InterfaceRole>
+          <CandidateRole />
+        </InterfaceRoleModel>
+      </InterfaceRoles>
+      <CanEnableRedundancy>true</CanEnableRedundancy>
+      <ModelKey>1</ModelKey>
+      <FollowerKeys>
+        <string>2</string>
+      </FollowerKeys>
+      <CandidateRoles />
+      <EnableDHCPMethod>true</EnableDHCPMethod>
+    </EthernetPortConfigModel>
+    <EthernetPortConfigModel>
+      <PortIdentifier>2</PortIdentifier>
+      <Name>Management 02</Name>
+      <EnableInterface>true</EnableInterface>
+      <EnableDHCP>false</EnableDHCP>
+      <EnableRedundancy>true</EnableRedundancy>
+      <RedundancyMode>AUTOMATIC</RedundancyMode>
+      <IsManualPrimaryPort>false</IsManualPrimaryPort>
+      <AutoNegotiate>AUTO_NEGOTIATE</AutoNegotiate>
+      <IPAddress>192.168.1.1</IPAddress>
+      <NetworkMask>255.255.255.0</NetworkMask>
+      <Gateway>0.0.0.0</Gateway>
+      <Utilization />
+      <InterfaceRoles>
+        <InterfaceRoleModel>
+          <InterfaceRole>Management</InterfaceRole>
+          <CandidateRole />
+        </InterfaceRoleModel>
+      </InterfaceRoles>
+      <CanEnableRedundancy>false</CanEnableRedundancy>
+      <ModelKey>2</ModelKey>
+      <FollowerKeys />
+      <CandidateRoles />
+      <EnableDHCPMethod>true</EnableDHCPMethod>
+    </EthernetPortConfigModel>
+  </EthernetPortConfigModels>
+</PlatformNetworkModel>

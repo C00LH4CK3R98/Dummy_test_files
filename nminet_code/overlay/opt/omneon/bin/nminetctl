@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec /opt/omneon/nmi/nminet/bin/nminetctl.py "$@"
